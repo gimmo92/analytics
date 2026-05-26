@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { labels } from "../../labels";
-import type { NineBoxCell, NineBoxData } from "../../types";
+import type { NineBoxCell, NineBoxData, NineBoxPlacement } from "../../types";
+import { avatarColorFromId, getInitials } from "../../utils/initials";
 import { nineBoxCellColor } from "../../utils/nineBox";
 import styles from "./GlobalNineBoxChart.module.css";
 
@@ -10,6 +11,45 @@ interface GlobalNineBoxChartProps {
 
 interface SelectedCell {
   cell: NineBoxCell;
+}
+
+function EmployeeAvatar({
+  employee,
+  onSelect,
+}: {
+  employee: NineBoxPlacement;
+  onSelect: () => void;
+}) {
+  const initials = getInitials(employee.employeeName);
+  const bg = avatarColorFromId(employee.employeeId);
+
+  return (
+    <span
+      className={styles.avatar}
+      style={{ backgroundColor: bg }}
+      tabIndex={0}
+      role="img"
+      aria-label={employee.employeeName}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+          onSelect();
+        }
+      }}
+    >
+      <span className={styles.avatarInitials} aria-hidden="true">
+        {initials}
+      </span>
+      <span className={styles.avatarTooltip} role="tooltip">
+        {employee.employeeName}
+      </span>
+    </span>
+  );
 }
 
 export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
@@ -63,10 +103,10 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
                     selected?.cell.potentialTier === potTier;
 
                   return (
-                    <button
+                    <div
                       key={cellKey(perfTier, potTier)}
-                      type="button"
                       role="gridcell"
+                      tabIndex={0}
                       className={`${styles.cell} ${isSelected ? styles.cellSelected : ""}`}
                       style={{
                         backgroundColor: nineBoxCellColor(
@@ -77,13 +117,33 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
                       }}
                       aria-label={`${cell.label}: ${cell.count} ${L.people}, ${cell.percentage.toFixed(0)}%`}
                       onClick={() => setSelected({ cell })}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelected({ cell });
+                        }
+                      }}
                     >
-                      <span className={styles.cellLabel}>{cell.label}</span>
-                      <span className={styles.cellCount}>{cell.count}</span>
-                      <span className={styles.cellPct}>
-                        {cell.percentage.toFixed(0)}%
-                      </span>
-                    </button>
+                      <div className={styles.cellHeader}>
+                        <span className={styles.cellLabel}>{cell.label}</span>
+                        <span className={styles.cellMeta}>
+                          <span className={styles.cellCount}>{cell.count}</span>
+                          <span className={styles.cellPct}>
+                            {cell.percentage.toFixed(0)}%
+                          </span>
+                        </span>
+                      </div>
+
+                      <div className={styles.avatars}>
+                        {cell.employees.map((emp) => (
+                          <EmployeeAvatar
+                            key={emp.appraisalId}
+                            employee={emp}
+                            onSelect={() => setSelected({ cell })}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -105,7 +165,8 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
             <h3 className={styles.detailTitle}>
               {selected.cell.label}
               <span className={styles.detailMeta}>
-                {selected.cell.count} {L.people} ({selected.cell.percentage.toFixed(1)}%)
+                {selected.cell.count} {L.people} (
+                {selected.cell.percentage.toFixed(1)}%)
               </span>
             </h3>
             <button
@@ -122,10 +183,21 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
             <ul className={styles.employeeList}>
               {selected.cell.employees.map((emp) => (
                 <li key={emp.appraisalId}>
-                  <span className={styles.empName}>{emp.employeeName}</span>
-                  <span className={styles.empScores}>
-                    {L.perfShort} {emp.performance.toFixed(2)} · {L.potShort}{" "}
-                    {emp.potential.toFixed(2)}
+                  <span
+                    className={styles.listAvatar}
+                    style={{
+                      backgroundColor: avatarColorFromId(emp.employeeId),
+                    }}
+                    aria-hidden="true"
+                  >
+                    {getInitials(emp.employeeName)}
+                  </span>
+                  <span className={styles.listBody}>
+                    <span className={styles.empName}>{emp.employeeName}</span>
+                    <span className={styles.empScores}>
+                      {L.perfShort} {emp.performance.toFixed(2)} ·{" "}
+                      {L.potShort} {emp.potential.toFixed(2)}
+                    </span>
                   </span>
                 </li>
               ))}

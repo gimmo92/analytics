@@ -105,7 +105,7 @@ export const labels = {
       subtitle:
         "Mappa performance vs potenziale su tutto il campione filtrato",
       help:
-        "Ogni cella mostra quante persone ricadono nel quadrante in base a performance (asse X) e potenziale (asse Y). Le soglie sono calcolate sui terzili del campione corrente. Clicca una cella per l'elenco nominativi.",
+        "Ogni cella mostra quante persone ricadono nel quadrante in base a performance (asse X) e potenziale (asse Y). I pallini con le iniziali rappresentano le persone: passa il mouse per nome e cognome. Clicca una cella per il dettaglio completo.",
       ariaLabel: "Matrice nove box performance e potenziale",
       gridLabel: "Griglia nove box",
       axisPerformance: "Performance →",
