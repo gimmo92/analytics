@@ -2,7 +2,10 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-lg);
+}
+
+.chartPanel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  min-width: 0;
 }

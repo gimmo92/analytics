@@ -8,6 +8,7 @@ export const labels = {
   },
 
   filters: {
+    ariaChart: "Filtri grafico",
     cycle: "Ciclo di valutazione",
     department: "Dipartimento",
     manager: "Manager",
