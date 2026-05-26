@@ -21,6 +21,8 @@ function EmployeeDot({
   isSelected: boolean;
   onSelect: () => void;
 }) {
+  const initials = getInitials(point.employeeName);
+
   return (
     <button
       type="button"
@@ -28,6 +30,7 @@ function EmployeeDot({
       style={{
         left: `${point.performancePercent}%`,
         top: `${100 - point.potentialPercent}%`,
+        backgroundColor: avatarColorFromId(point.employeeId),
       }}
       aria-label={`${point.employeeName}, ${point.quadrantLabel}`}
       onClick={(e) => {
@@ -35,6 +38,9 @@ function EmployeeDot({
         onSelect();
       }}
     >
+      <span className={styles.dotInitials} aria-hidden="true">
+        {initials}
+      </span>
       <span className={styles.dotTooltip} role="tooltip">
         {point.employeeName}
       </span>
