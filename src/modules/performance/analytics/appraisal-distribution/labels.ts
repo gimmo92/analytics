@@ -3,17 +3,17 @@ export const labels = {
     histogram: "Distribuzione rating",
     bellCurve: "Curva attesa vs reale",
     managerHeatmap: "Heatmap manager",
-    departmentBoxplot: "Box plot dipartimenti",
+    teamHistogram: "Confronto team",
     nineBox: "9-box globale",
   },
 
   filters: {
     ariaChart: "Filtri grafico",
     cycle: "Ciclo di valutazione",
-    department: "Dipartimento",
+    team: "Team",
     manager: "Manager",
     completedOnly: "Includi solo valutazioni completate",
-    allDepartments: "Tutti i dipartimenti",
+    allTeams: "Tutti i team",
     allManagers: "Tutti i manager",
   },
 
@@ -82,23 +82,19 @@ export const labels = {
       next: "Successiva",
       clickHint: "Clicca per dettaglio",
     },
-    departmentBoxplot: {
-      title: "Box plot per dipartimento",
-      subtitle: "Confronto della dispersione dei rating tra aree",
+    teamHistogram: {
+      title: "Rating medio per team",
+      subtitle: "Confronto tra team rispetto alla media aziendale",
       help:
-        "Per ogni dipartimento: minimo, quartili, mediana, massimo e outlier (punti). La linea tratteggiata è la media aziendale del campione filtrato.",
-      ariaLabel: "Box plot rating per dipartimento",
-      sortMedian: "Per mediana",
+        "Ogni barra è la media dei rating del team. Il colore indica se il team è sopra (verde), sotto (rosso) o in linea con la media aziendale. La linea tratteggiata è la media globale del campione filtrato.",
+      ariaLabel: "Istogramma confronto rating medio per team",
+      sortAverage: "Per media",
       sortAlpha: "Alfabetico",
       companyMean: "Media aziendale",
-      xAxis: "Dipartimento",
-      yAxis: "Rating",
-      tooltipMin: "Min",
-      tooltipQ1: "Q1",
-      tooltipMedian: "Mediana",
-      tooltipQ3: "Q3",
-      tooltipMax: "Max",
-      tooltipOutliers: "Outlier",
+      xAxis: "Team",
+      yAxis: "Rating medio",
+      tooltipAverage: "Media",
+      tooltipDiff: "Scostamento vs media",
       tooltipSample: "Campione",
     },
     nineBox: {
@@ -106,7 +102,7 @@ export const labels = {
       subtitle:
         "Mappa performance vs potenziale su tutto il campione filtrato",
       help:
-        "Ogni pallino blu è una persona, posizionata in base al percentile di performance e potenziale. Passa il mouse per nome e cognome; clicca per i dettagli.",
+        "Ogni pallino è una persona, posizionata in base al percentile di performance e potenziale. Passa il mouse per nome e cognome; clicca per i dettagli.",
       ariaLabel: "Matrice nove box performance e potenziale con posizionamento scatter",
       gridLabel: "Griglia nove box con distribuzione persone",
       axisPerformance: "% Performance",
@@ -120,7 +116,7 @@ export const labels = {
     close: "Chiudi",
     placeholder:
       "Drill-down in arrivo: qui verranno mostrate le valutazioni del team per questo manager.",
-    department: "Dipartimento",
+    team: "Team",
     average: "Media rating",
     total: "Valutati",
     calibration: "Calibrazione",

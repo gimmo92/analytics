@@ -90,7 +90,7 @@ export function buildManagerHeatmap(
   };
 }
 
-export function getDepartmentNameForManager(managerId: string): string {
+export function getTeamNameForManager(managerId: string): string {
   const manager = MOCK_MANAGERS.find((m) => m.id === managerId);
   if (!manager) return "";
   return (

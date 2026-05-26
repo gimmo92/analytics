@@ -12,7 +12,7 @@ export const CHART_FILTER_FIELDS: Record<ChartTabId, ChartFilterField[]> = {
   histogram: ["cycle", "department", "completedOnly"],
   "bell-curve": ["cycle", "completedOnly"],
   "manager-heatmap": ["cycle", "department", "completedOnly"],
-  "department-boxplot": ["cycle", "department", "completedOnly"],
+  "team-histogram": ["cycle", "department", "completedOnly"],
 };
 
 export const CHART_TAB_IDS = Object.keys(

@@ -9,7 +9,7 @@ import type {
   AppraisalAnalyticsResult,
   ExpectedDistributionConfig,
 } from "../types";
-import { buildDepartmentBoxplot } from "../utils/boxplot";
+import { buildTeamHistogram } from "../utils/teamHistogram";
 import { buildDistribution } from "../utils/distribution";
 import { filterAppraisals } from "../utils/filterAppraisals";
 import { buildHistogram } from "../utils/histogram";
@@ -59,9 +59,9 @@ export function useAppraisalAnalytics(
     return buildManagerHeatmap(filtered);
   }, [filtered]);
 
-  const departmentBoxplot = useMemo(() => {
+  const teamHistogram = useMemo(() => {
     if (filtered.length === 0) return null;
-    return buildDepartmentBoxplot(filtered);
+    return buildTeamHistogram(filtered);
   }, [filtered]);
 
   const nineBox = useMemo(() => {
@@ -82,7 +82,7 @@ export function useAppraisalAnalytics(
     histogram,
     distribution,
     managerHeatmap,
-    departmentBoxplot,
+    teamHistogram,
     nineBox,
     loading,
     error,

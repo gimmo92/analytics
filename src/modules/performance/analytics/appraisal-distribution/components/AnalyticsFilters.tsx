@@ -74,7 +74,7 @@ export function AnalyticsFilters({
 
       {show("department") && (
         <fieldset className={styles.fieldset}>
-          <legend className={styles.label}>{labels.filters.department}</legend>
+          <legend className={styles.label}>{labels.filters.team}</legend>
           <div className={styles.chips}>
             {departments.map((d) => (
               <label key={d.id} className={styles.chip}>
@@ -89,7 +89,7 @@ export function AnalyticsFilters({
           </div>
           {filters.departmentIds.length === 0 && (
             <span className={styles.hint}>
-              {labels.filters.allDepartments}
+              {labels.filters.allTeams}
             </span>
           )}
         </fieldset>

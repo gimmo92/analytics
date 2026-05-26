@@ -124,20 +124,16 @@ export interface ManagerHeatmapData {
   maxCellCount: number;
 }
 
-export interface DepartmentBoxplotItem {
-  departmentId: string;
-  departmentName: string;
-  min: number;
-  q1: number;
-  median: number;
-  q3: number;
-  max: number;
-  outliers: number[];
+export interface TeamHistogramBar {
+  teamId: string;
+  teamName: string;
+  average: number;
   sampleSize: number;
+  diffFromCompanyMean: number;
 }
 
-export interface DepartmentBoxplotData {
-  departments: DepartmentBoxplotItem[];
+export interface TeamHistogramData {
+  teams: TeamHistogramBar[];
   companyMean: number;
 }
 
@@ -175,7 +171,7 @@ export interface AppraisalAnalyticsResult {
   histogram: HistogramData | null;
   distribution: DistributionData | null;
   managerHeatmap: ManagerHeatmapData | null;
-  departmentBoxplot: DepartmentBoxplotData | null;
+  teamHistogram: TeamHistogramData | null;
   nineBox: NineBoxData | null;
   loading: boolean;
   error: Error | null;

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { labels } from "../labels";
 import type { ManagerCalibrationBadge, ManagerHeatmapRow } from "../types";
-import { getDepartmentNameForManager } from "../utils/managerHeatmap";
+import { getTeamNameForManager } from "../utils/managerHeatmap";
 import styles from "./ManagerDrilldownModal.module.css";
 
 interface ManagerDrilldownModalProps {
@@ -42,7 +42,7 @@ export function ManagerDrilldownModal({
   console.log("[onManagerClick]", row.managerId, row);
 
   const L = labels.modal;
-  const dept = getDepartmentNameForManager(row.managerId);
+  const teamName = getTeamNameForManager(row.managerId);
 
   return (
     <div
@@ -72,8 +72,8 @@ export function ManagerDrilldownModal({
         </header>
         <dl className={styles.meta}>
           <div>
-            <dt>{L.department}</dt>
-            <dd>{dept}</dd>
+            <dt>{L.team}</dt>
+            <dd>{teamName}</dd>
           </div>
           <div>
             <dt>{L.average}</dt>

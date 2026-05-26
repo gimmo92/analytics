@@ -7,7 +7,7 @@ import {
 } from "./components/ChartTabs";
 import { ManagerDrilldownModal } from "./components/ManagerDrilldownModal";
 import { BellCurveChart } from "./components/charts/BellCurveChart";
-import { DepartmentBoxplotChart } from "./components/charts/DepartmentBoxplotChart";
+import { TeamComparisonHistogramChart } from "./components/charts/TeamComparisonHistogramChart";
 import { ManagerHeatmapChart } from "./components/charts/ManagerHeatmapChart";
 import { GlobalNineBoxChart } from "./components/charts/GlobalNineBoxChart";
 import { RatingHistogramChart } from "./components/charts/RatingHistogramChart";
@@ -27,10 +27,7 @@ const CHART_TABS = [
   { id: "histogram" as const, label: labels.tabs.histogram },
   { id: "bell-curve" as const, label: labels.tabs.bellCurve },
   { id: "manager-heatmap" as const, label: labels.tabs.managerHeatmap },
-  {
-    id: "department-boxplot" as const,
-    label: labels.tabs.departmentBoxplot,
-  },
+  { id: "team-histogram" as const, label: labels.tabs.teamHistogram },
 ];
 
 function createDefaultFilters(): AppraisalAnalyticsFilters {
@@ -60,7 +57,7 @@ const TAB_LABEL_FOR_FILTERS: Record<ChartTabId, string> = {
   histogram: labels.tabs.histogram,
   "bell-curve": labels.tabs.bellCurve,
   "manager-heatmap": labels.tabs.managerHeatmap,
-  "department-boxplot": labels.tabs.departmentBoxplot,
+  "team-histogram": labels.tabs.teamHistogram,
 };
 
 export function AppraisalDistributionView() {
@@ -90,8 +87,8 @@ export function AppraisalDistributionView() {
         return analytics.distribution === null;
       case "manager-heatmap":
         return analytics.managerHeatmap === null;
-      case "department-boxplot":
-        return analytics.departmentBoxplot === null;
+      case "team-histogram":
+        return analytics.teamHistogram === null;
     }
   }, [activeTab, analytics]);
 
@@ -193,21 +190,21 @@ export function AppraisalDistributionView() {
             </ChartCard>
           </>
         );
-      case "department-boxplot":
+      case "team-histogram":
         return (
           <>
             {renderChartFilters()}
             <ChartCard
-              chartId="department-boxplot"
-              title={labels.charts.departmentBoxplot.title}
-              subtitle={labels.charts.departmentBoxplot.subtitle}
-              helpText={labels.charts.departmentBoxplot.help}
-              ariaLabel={labels.charts.departmentBoxplot.ariaLabel}
+              chartId="team-histogram"
+              title={labels.charts.teamHistogram.title}
+              subtitle={labels.charts.teamHistogram.subtitle}
+              helpText={labels.charts.teamHistogram.help}
+              ariaLabel={labels.charts.teamHistogram.ariaLabel}
               loading={analytics.loading}
               empty={isEmpty}
             >
-              {analytics.departmentBoxplot && (
-                <DepartmentBoxplotChart data={analytics.departmentBoxplot} />
+              {analytics.teamHistogram && (
+                <TeamComparisonHistogramChart data={analytics.teamHistogram} />
               )}
             </ChartCard>
           </>
