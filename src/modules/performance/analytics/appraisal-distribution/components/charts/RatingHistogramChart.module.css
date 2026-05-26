@@ -1,0 +1,29 @@
+.wrap {
+  width: 100%;
+}
+
+.tooltip {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-card);
+}
+
+.tooltipTitle {
+  margin: 0 0 var(--space-xs);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.tooltip p {
+  margin: 2px 0;
+  color: var(--color-text-secondary);
+}
+
+.barLabel {
+  font-size: 11px;
+  fill: var(--color-text-secondary);
+  font-weight: 600;
+}
