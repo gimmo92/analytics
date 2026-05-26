@@ -5,7 +5,9 @@
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  min-height: 360px;
+  min-height: 420px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-top: none;
 }
 
 .header {

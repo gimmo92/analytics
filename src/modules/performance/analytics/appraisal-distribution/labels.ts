@@ -1,7 +1,10 @@
 export const labels = {
-  pageTitle: "Analytics Post-Appraisal — Distribuzione e Calibrazione",
-  pageSubtitle:
-    "Analisi della distribuzione dei rating e della calibrazione tra manager e dipartimenti",
+  tabs: {
+    histogram: "Distribuzione rating",
+    bellCurve: "Curva attesa vs reale",
+    managerHeatmap: "Heatmap manager",
+    departmentBoxplot: "Box plot dipartimenti",
+  },
 
   filters: {
     cycle: "Ciclo di valutazione",
