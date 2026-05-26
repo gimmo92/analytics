@@ -5,7 +5,8 @@ export type ChartTabId =
   | "histogram"
   | "bell-curve"
   | "manager-heatmap"
-  | "department-boxplot";
+  | "department-boxplot"
+  | "nine-box";
 
 export interface ChartTabItem {
   id: ChartTabId;

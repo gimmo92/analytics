@@ -21,10 +21,14 @@ export interface AppraisalCycle {
 export interface Appraisal {
   id: string;
   employeeId: string;
+  employeeName: string;
   cycleId: string;
   departmentId: string;
   managerId: string;
+  /** Performance (asse X della 9-box) */
   finalRating: number;
+  /** Potenziale (asse Y della 9-box) */
+  potentialRating: number;
   status: AppraisalStatus;
 }
 
@@ -137,11 +141,40 @@ export interface DepartmentBoxplotData {
   companyMean: number;
 }
 
+export type NineBoxTier = 1 | 2 | 3;
+
+export interface NineBoxPlacement {
+  appraisalId: string;
+  employeeId: string;
+  employeeName: string;
+  performance: number;
+  potential: number;
+  performanceTier: NineBoxTier;
+  potentialTier: NineBoxTier;
+}
+
+export interface NineBoxCell {
+  performanceTier: NineBoxTier;
+  potentialTier: NineBoxTier;
+  label: string;
+  count: number;
+  percentage: number;
+  employees: NineBoxPlacement[];
+}
+
+export interface NineBoxData {
+  cells: NineBoxCell[];
+  total: number;
+  performanceThresholds: { p33: number; p66: number };
+  potentialThresholds: { p33: number; p66: number };
+}
+
 export interface AppraisalAnalyticsResult {
   histogram: HistogramData | null;
   distribution: DistributionData | null;
   managerHeatmap: ManagerHeatmapData | null;
   departmentBoxplot: DepartmentBoxplotData | null;
+  nineBox: NineBoxData | null;
   loading: boolean;
   error: Error | null;
   cycles: AppraisalCycle[];

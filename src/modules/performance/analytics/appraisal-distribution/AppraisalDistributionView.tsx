@@ -9,6 +9,7 @@ import { ManagerDrilldownModal } from "./components/ManagerDrilldownModal";
 import { BellCurveChart } from "./components/charts/BellCurveChart";
 import { DepartmentBoxplotChart } from "./components/charts/DepartmentBoxplotChart";
 import { ManagerHeatmapChart } from "./components/charts/ManagerHeatmapChart";
+import { GlobalNineBoxChart } from "./components/charts/GlobalNineBoxChart";
 import { RatingHistogramChart } from "./components/charts/RatingHistogramChart";
 import { getDefaultClosedCycleId } from "./data/mockAppraisalData";
 import { useAppraisalAnalytics } from "./hooks/useAppraisalAnalytics";
@@ -25,6 +26,7 @@ const CHART_TABS = [
     id: "department-boxplot" as const,
     label: labels.tabs.departmentBoxplot,
   },
+  { id: "nine-box" as const, label: labels.tabs.nineBox },
 ];
 
 export function AppraisalDistributionView() {
@@ -118,6 +120,20 @@ export function AppraisalDistributionView() {
             {analytics.departmentBoxplot && (
               <DepartmentBoxplotChart data={analytics.departmentBoxplot} />
             )}
+          </ChartCard>
+        );
+      case "nine-box":
+        return (
+          <ChartCard
+            chartId="nine-box"
+            title={labels.charts.nineBox.title}
+            subtitle={labels.charts.nineBox.subtitle}
+            helpText={labels.charts.nineBox.help}
+            ariaLabel={labels.charts.nineBox.ariaLabel}
+            loading={analytics.loading}
+            empty={isEmpty}
+          >
+            {analytics.nineBox && <GlobalNineBoxChart data={analytics.nineBox} />}
           </ChartCard>
         );
     }

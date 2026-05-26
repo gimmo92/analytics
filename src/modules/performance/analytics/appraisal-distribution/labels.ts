@@ -4,6 +4,7 @@ export const labels = {
     bellCurve: "Curva attesa vs reale",
     managerHeatmap: "Heatmap manager",
     departmentBoxplot: "Box plot dipartimenti",
+    nineBox: "9-box globale",
   },
 
   filters: {
@@ -98,6 +99,31 @@ export const labels = {
       tooltipMax: "Max",
       tooltipOutliers: "Outlier",
       tooltipSample: "Campione",
+    },
+    nineBox: {
+      title: "9-box globale",
+      subtitle:
+        "Mappa performance vs potenziale su tutto il campione filtrato",
+      help:
+        "Ogni cella mostra quante persone ricadono nel quadrante in base a performance (asse X) e potenziale (asse Y). Le soglie sono calcolate sui terzili del campione corrente. Clicca una cella per l'elenco nominativi.",
+      ariaLabel: "Matrice nove box performance e potenziale",
+      gridLabel: "Griglia nove box",
+      axisPerformance: "Performance →",
+      axisPotential: "Potenziale ↑",
+      performanceLow: "Bassa",
+      performanceMid: "Media",
+      performanceHigh: "Alta",
+      potentialLow: "Basso",
+      potentialMid: "Medio",
+      potentialHigh: "Alto",
+      total: "Totale valutati",
+      people: "persone",
+      perfThresholds: "Soglie performance",
+      potThresholds: "soglie potenziale",
+      closeDetail: "Chiudi",
+      noEmployees: "Nessuna persona in questa cella.",
+      perfShort: "Perf.",
+      potShort: "Pot.",
     },
   },
 

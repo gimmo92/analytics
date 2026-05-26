@@ -60,6 +60,32 @@ export const MOCK_MANAGERS: Manager[] = MANAGER_NAMES.map((name, index) => ({
   departmentId: MOCK_DEPARTMENTS[index % MOCK_DEPARTMENTS.length].id,
 }));
 
+const EMPLOYEE_FIRST = [
+  "Marco",
+  "Giulia",
+  "Luca",
+  "Sara",
+  "Andrea",
+  "Elena",
+  "Matteo",
+  "Chiara",
+  "Davide",
+  "Francesca",
+];
+
+const EMPLOYEE_LAST = [
+  "Rossi",
+  "Bianchi",
+  "Ferrari",
+  "Romano",
+  "Colombo",
+  "Ricci",
+  "Marino",
+  "Greco",
+  "Bruno",
+  "Gallo",
+];
+
 /** Box-Muller: rating sbilanciato verso l'alto (media ~3.6, σ ~0.7) */
 function sampleRating(): number {
   const u1 = Math.random();
@@ -69,6 +95,23 @@ function sampleRating(): number {
   const raw = 3.6 + z * 0.7;
   const clamped = Math.min(5, Math.max(1, raw));
   return Math.round(clamped * 4) / 4;
+}
+
+/** Potenziale correlato ma non identico alla performance */
+function samplePotential(performance: number): number {
+  const u1 = Math.random();
+  const u2 = Math.random();
+  const z =
+    Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  const raw = performance * 0.55 + 2.0 + z * 0.65;
+  const clamped = Math.min(5, Math.max(1, raw));
+  return Math.round(clamped * 4) / 4;
+}
+
+function employeeName(index: number): string {
+  const first = EMPLOYEE_FIRST[index % EMPLOYEE_FIRST.length];
+  const last = EMPLOYEE_LAST[Math.floor(index / EMPLOYEE_FIRST.length) % EMPLOYEE_LAST.length];
+  return `${first} ${last}`;
 }
 
 function pick<T>(items: T[]): T {
@@ -89,13 +132,16 @@ function generateAppraisals(): Appraisal[] {
   for (let i = 0; i < 200; i++) {
     const manager = pick(MOCK_MANAGERS);
     const cycle = i < 140 ? MOCK_CYCLES[0] : MOCK_CYCLES[1];
+    const finalRating = sampleRating();
     appraisals.push({
       id: `apr-${i + 1}`,
       employeeId: `emp-${i + 1}`,
+      employeeName: employeeName(i),
       cycleId: cycle.id,
       departmentId: manager.departmentId,
       managerId: manager.id,
-      finalRating: sampleRating(),
+      finalRating,
+      potentialRating: samplePotential(finalRating),
       status: pick(statuses),
     });
   }

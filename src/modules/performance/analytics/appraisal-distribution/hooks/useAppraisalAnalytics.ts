@@ -14,6 +14,7 @@ import { buildDistribution } from "../utils/distribution";
 import { filterAppraisals } from "../utils/filterAppraisals";
 import { buildHistogram } from "../utils/histogram";
 import { buildManagerHeatmap } from "../utils/managerHeatmap";
+import { buildNineBox } from "../utils/nineBox";
 
 const MOCK_LATENCY_MS = 400;
 
@@ -63,6 +64,11 @@ export function useAppraisalAnalytics(
     return buildDepartmentBoxplot(filtered);
   }, [filtered]);
 
+  const nineBox = useMemo(() => {
+    if (filtered.length === 0) return null;
+    return buildNineBox(filtered);
+  }, [filtered]);
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -77,6 +83,7 @@ export function useAppraisalAnalytics(
     distribution,
     managerHeatmap,
     departmentBoxplot,
+    nineBox,
     loading,
     error,
     cycles: MOCK_CYCLES,
