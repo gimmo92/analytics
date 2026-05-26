@@ -19,9 +19,6 @@ export function filterAppraisals(
     ) {
       return false;
     }
-    if (filters.completedOnly && appraisal.status !== "completed") {
-      return false;
-    }
     return true;
   });
 }

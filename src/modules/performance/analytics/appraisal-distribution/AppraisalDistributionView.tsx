@@ -35,7 +35,6 @@ function createDefaultFilters(): AppraisalAnalyticsFilters {
     cycleId: getDefaultClosedCycleId(),
     departmentIds: [],
     managerIds: [],
-    completedOnly: true,
   };
 }
 

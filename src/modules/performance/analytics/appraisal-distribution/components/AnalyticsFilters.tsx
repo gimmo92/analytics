@@ -116,18 +116,6 @@ export function AnalyticsFilters({
         </fieldset>
       )}
 
-      {show("completedOnly") && (
-        <label className={styles.toggle}>
-          <input
-            type="checkbox"
-            checked={filters.completedOnly}
-            onChange={(e) =>
-              onChange({ ...filters, completedOnly: e.target.checked })
-            }
-          />
-          <span>{labels.filters.completedOnly}</span>
-        </label>
-      )}
     </div>
   );
 }

@@ -74,18 +74,3 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--font-size-sm);
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.toggle input {
-  accent-color: var(--color-primary);
-  width: 16px;
-  height: 16px;
-}

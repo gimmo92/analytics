@@ -12,7 +12,6 @@ export const labels = {
     cycle: "Ciclo di valutazione",
     team: "Team",
     manager: "Manager",
-    completedOnly: "Includi solo valutazioni completate",
     allTeams: "Tutti i team",
     allManagers: "Tutti i manager",
   },

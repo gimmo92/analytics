@@ -60,7 +60,6 @@ export interface AppraisalAnalyticsFilters {
   cycleId: string;
   departmentIds: string[];
   managerIds: string[];
-  completedOnly: boolean;
 }
 
 export interface HistogramBin {

@@ -1,18 +1,14 @@
 import type { ChartTabId } from "./components/ChartTabs";
 
-export type ChartFilterField =
-  | "cycle"
-  | "department"
-  | "manager"
-  | "completedOnly";
+export type ChartFilterField = "cycle" | "department" | "manager";
 
 /** Filtri disponibili per ciascun grafico */
 export const CHART_FILTER_FIELDS: Record<ChartTabId, ChartFilterField[]> = {
-  "nine-box": ["cycle", "department", "manager", "completedOnly"],
-  histogram: ["cycle", "department", "completedOnly"],
-  "bell-curve": ["cycle", "completedOnly"],
-  "manager-heatmap": ["cycle", "department", "completedOnly"],
-  "team-histogram": ["cycle", "department", "completedOnly"],
+  "nine-box": ["cycle", "department", "manager"],
+  histogram: ["cycle", "department"],
+  "bell-curve": ["cycle"],
+  "manager-heatmap": ["cycle", "department"],
+  "team-histogram": ["cycle", "department"],
 };
 
 export const CHART_TAB_IDS = Object.keys(
