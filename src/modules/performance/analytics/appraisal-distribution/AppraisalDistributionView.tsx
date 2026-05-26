@@ -5,12 +5,16 @@ import {
   ChartTabs,
   type ChartTabId,
 } from "./components/ChartTabs";
-import { ChartPlaceholder } from "./components/charts/ChartPlaceholder";
+import { ManagerDrilldownModal } from "./components/ManagerDrilldownModal";
+import { BellCurveChart } from "./components/charts/BellCurveChart";
+import { DepartmentBoxplotChart } from "./components/charts/DepartmentBoxplotChart";
+import { ManagerHeatmapChart } from "./components/charts/ManagerHeatmapChart";
 import { RatingHistogramChart } from "./components/charts/RatingHistogramChart";
 import { getDefaultClosedCycleId } from "./data/mockAppraisalData";
 import { useAppraisalAnalytics } from "./hooks/useAppraisalAnalytics";
 import { labels } from "./labels";
 import type { AppraisalAnalyticsFilters } from "./types";
+import type { ManagerHeatmapRow } from "./types";
 import styles from "./AppraisalDistributionView.module.css";
 
 const CHART_TABS = [
@@ -32,6 +36,8 @@ export function AppraisalDistributionView() {
   }));
 
   const [activeTab, setActiveTab] = useState<ChartTabId>("histogram");
+  const [selectedManager, setSelectedManager] =
+    useState<ManagerHeatmapRow | null>(null);
 
   const analytics = useAppraisalAnalytics(filters);
 
@@ -39,6 +45,11 @@ export function AppraisalDistributionView() {
     if (analytics.loading) return false;
     return analytics.histogram === null;
   }, [analytics.loading, analytics.histogram]);
+
+  const handleManagerClick = (managerId: string, row: ManagerHeatmapRow) => {
+    console.log("[onManagerClick]", managerId, row);
+    setSelectedManager(row);
+  };
 
   const renderActiveChart = () => {
     switch (activeTab) {
@@ -69,7 +80,9 @@ export function AppraisalDistributionView() {
             loading={analytics.loading}
             empty={isEmpty}
           >
-            <ChartPlaceholder />
+            {analytics.distribution && (
+              <BellCurveChart data={analytics.distribution} />
+            )}
           </ChartCard>
         );
       case "manager-heatmap":
@@ -83,7 +96,12 @@ export function AppraisalDistributionView() {
             loading={analytics.loading}
             empty={isEmpty}
           >
-            <ChartPlaceholder />
+            {analytics.managerHeatmap && (
+              <ManagerHeatmapChart
+                data={analytics.managerHeatmap}
+                onManagerClick={handleManagerClick}
+              />
+            )}
           </ChartCard>
         );
       case "department-boxplot":
@@ -97,7 +115,9 @@ export function AppraisalDistributionView() {
             loading={analytics.loading}
             empty={isEmpty}
           >
-            <ChartPlaceholder />
+            {analytics.departmentBoxplot && (
+              <DepartmentBoxplotChart data={analytics.departmentBoxplot} />
+            )}
           </ChartCard>
         );
     }
@@ -120,6 +140,11 @@ export function AppraisalDistributionView() {
       >
         {renderActiveChart()}
       </ChartTabs>
+
+      <ManagerDrilldownModal
+        row={selectedManager}
+        onClose={() => setSelectedManager(null)}
+      />
     </div>
   );
 }

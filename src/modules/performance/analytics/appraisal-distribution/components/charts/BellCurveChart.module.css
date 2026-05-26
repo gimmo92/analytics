@@ -1,0 +1,74 @@
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+.badgeUp,
+.badgeDown,
+.badgeNeutral {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-card);
+  max-width: 220px;
+}
+
+.badgeUp {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.badgeDown {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.badgeNeutral {
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.badgeLabel {
+  font-weight: 500;
+}
+
+.badgeValue {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+}
+
+.badgeArrow {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.badgeHint {
+  width: 100%;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.tooltip {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-card);
+}
+
+.tooltip p {
+  margin: 2px 0;
+  color: var(--color-text-secondary);
+}

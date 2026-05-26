@@ -49,6 +49,9 @@ export const RATING_MIN = 1;
 export const RATING_MAX = 5;
 export const RATING_BIN_SIZE = 0.25;
 
+/** Scostamento dalla media aziendale oltre cui il manager è Generoso/Severo */
+export const MANAGER_CALIBRATION_THRESHOLD = 0.4;
+
 export interface AppraisalAnalyticsFilters {
   cycleId: string;
   departmentIds: string[];
@@ -70,16 +73,68 @@ export interface HistogramData {
   total: number;
 }
 
+export interface ExpectedDistributionConfig {
+  type: "normal" | "percentages";
+  mean?: number;
+  sigma?: number;
+  /** Percentuali per bucket 1–5 (es. 10/20/40/20/10) */
+  percentages?: Partial<Record<RatingBucketId, number>>;
+}
+
+export interface DistributionPoint {
+  x: number;
+  realDensity: number;
+  expectedDensity: number;
+  gap: number;
+}
+
 export interface DistributionData {
-  placeholder: true;
+  points: DistributionPoint[];
+  meanDeviation: number;
+  realMean: number;
+  expectedMean: number;
+}
+
+export type ManagerCalibrationBadge = "generous" | "strict" | "aligned";
+
+export type ManagerHeatmapSortKey =
+  | "name"
+  | "avgAsc"
+  | "avgDesc"
+  | "countDesc";
+
+export interface ManagerHeatmapRow {
+  managerId: string;
+  managerName: string;
+  bucketCounts: Record<RatingBucketId, number>;
+  averageRating: number;
+  totalCount: number;
+  badge: ManagerCalibrationBadge;
+  deviationFromCompanyMean: number;
 }
 
 export interface ManagerHeatmapData {
-  placeholder: true;
+  rows: ManagerHeatmapRow[];
+  companyMean: number;
+  calibrationThreshold: number;
+  maxCellCount: number;
+}
+
+export interface DepartmentBoxplotItem {
+  departmentId: string;
+  departmentName: string;
+  min: number;
+  q1: number;
+  median: number;
+  q3: number;
+  max: number;
+  outliers: number[];
+  sampleSize: number;
 }
 
 export interface DepartmentBoxplotData {
-  placeholder: true;
+  departments: DepartmentBoxplotItem[];
+  companyMean: number;
 }
 
 export interface AppraisalAnalyticsResult {
