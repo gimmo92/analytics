@@ -110,9 +110,6 @@ export const labels = {
       gridLabel: "Griglia nove box con distribuzione persone",
       axisPerformance: "% Performance",
       axisPotential: "% Potenziale",
-      scatterHint:
-        "Posizione = percentile relativo nel campione (linee a 33% e 67%).",
-      total: "Totale valutati",
       closeDetail: "Chiudi",
     },
   },

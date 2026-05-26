@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { labels } from "../../labels";
 import type { NineBoxData, NineBoxScatterPoint } from "../../types";
 import { NINE_BOX_GRID_LINES } from "../../types";
@@ -46,30 +46,8 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
   const L = labels.charts.nineBox;
   const [selected, setSelected] = useState<NineBoxScatterPoint | null>(null);
 
-  const legendItems = useMemo(
-    () => data.quadrants.filter((q) => q.count > 0).slice(0, 6),
-    [data.quadrants],
-  );
-
   return (
     <div className={styles.wrap} role="img" aria-label={L.ariaLabel}>
-      <p className={styles.summary}>
-        {L.total}: <strong>{data.total}</strong>
-        <span className={styles.hint}>{L.scatterHint}</span>
-      </p>
-
-      {legendItems.length > 0 && (
-        <div className={styles.legend} aria-hidden="true">
-          {legendItems.map((q) => (
-            <span key={`${q.performanceTier}-${q.potentialTier}`}>
-              <span className={styles.legendSwatch} />
-              {q.label}
-              <span className={styles.legendCount}>({q.count})</span>
-            </span>
-          ))}
-        </div>
-      )}
-
       <div className={styles.chartFrame}>
         <div className={styles.yAxisLabel}>{L.axisPotential}</div>
 

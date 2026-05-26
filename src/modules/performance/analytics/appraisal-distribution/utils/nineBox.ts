@@ -22,6 +22,9 @@ const QUADRANT_LABELS: Record<string, string> = {
 const FIXED_P33 = 2.33;
 const FIXED_P66 = 3.67;
 
+/** Massimo pallini visibili sulla 9-box */
+export const NINE_BOX_MAX_USERS = 20;
+
 function percentile(sorted: number[], p: number): number {
   if (sorted.length === 0) return 0;
   if (sorted.length === 1) return sorted[0];
@@ -136,7 +139,11 @@ export function buildNineBox(appraisals: Appraisal[]): NineBoxData {
   const perfThresholds = thresholds(performances);
   const potThresholds = thresholds(potentials);
 
-  const rawPoints: NineBoxScatterPoint[] = appraisals.map((a) => {
+  const displayed = [...appraisals]
+    .sort((a, b) => a.employeeName.localeCompare(b.employeeName, "it"))
+    .slice(0, NINE_BOX_MAX_USERS);
+
+  const rawPoints: NineBoxScatterPoint[] = displayed.map((a) => {
     const performanceTier = toTier(a.finalRating, perfThresholds);
     const potentialTier = toTier(a.potentialRating, potThresholds);
     return {
