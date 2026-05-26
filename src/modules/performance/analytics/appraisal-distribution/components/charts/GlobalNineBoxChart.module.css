@@ -35,11 +35,10 @@
 }
 
 .legendSwatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   background: var(--color-primary);
-  opacity: 0.7;
 }
 
 .legendCount {
@@ -127,36 +126,39 @@
 .dot {
   position: absolute;
   transform: translate(-50%, -50%);
-  width: 28px;
-  height: 28px;
+  width: 12px;
+  height: 12px;
   padding: 0;
-  border: 2px solid #fff;
+  border: none;
   border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  background: var(--color-primary);
   cursor: pointer;
   z-index: 2;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    width 0.12s ease,
+    height 0.12s ease;
 }
 
 .dot:hover,
 .dot:focus-visible {
-  transform: translate(-50%, -50%) scale(1.15);
+  transform: translate(-50%, -50%) scale(1.35);
+  width: 14px;
+  height: 14px;
   z-index: 5;
   outline: none;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
 }
 
 .dotSelected {
-  transform: translate(-50%, -50%) scale(1.2);
+  transform: translate(-50%, -50%) scale(1.5);
+  width: 14px;
+  height: 14px;
   z-index: 6;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.45);
-}
-
-.dotInitials {
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.02em;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 5px rgba(37, 99, 235, 0.55);
 }
 
 .dotTooltip {
@@ -307,7 +309,7 @@
   }
 
   .dot {
-    width: 24px;
-    height: 24px;
+    width: 10px;
+    height: 10px;
   }
 }

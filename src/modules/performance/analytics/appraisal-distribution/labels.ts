@@ -105,7 +105,7 @@ export const labels = {
       subtitle:
         "Mappa performance vs potenziale su tutto il campione filtrato",
       help:
-        "Ogni pallino è una persona posizionata in base al percentile di performance (asse X) e potenziale (asse Y) nel campione filtrato. Passa il mouse per nome e cognome; clicca per i dettagli.",
+        "Ogni pallino blu è una persona, posizionata in base al percentile di performance e potenziale. Passa il mouse per nome e cognome; clicca per i dettagli.",
       ariaLabel: "Matrice nove box performance e potenziale con posizionamento scatter",
       gridLabel: "Griglia nove box con distribuzione persone",
       axisPerformance: "% Performance",
