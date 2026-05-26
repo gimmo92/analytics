@@ -19,6 +19,7 @@ import type { ManagerHeatmapRow } from "./types";
 import styles from "./AppraisalDistributionView.module.css";
 
 const CHART_TABS = [
+  { id: "nine-box" as const, label: labels.tabs.nineBox },
   { id: "histogram" as const, label: labels.tabs.histogram },
   { id: "bell-curve" as const, label: labels.tabs.bellCurve },
   { id: "manager-heatmap" as const, label: labels.tabs.managerHeatmap },
@@ -26,7 +27,6 @@ const CHART_TABS = [
     id: "department-boxplot" as const,
     label: labels.tabs.departmentBoxplot,
   },
-  { id: "nine-box" as const, label: labels.tabs.nineBox },
 ];
 
 export function AppraisalDistributionView() {
@@ -37,7 +37,7 @@ export function AppraisalDistributionView() {
     completedOnly: true,
   }));
 
-  const [activeTab, setActiveTab] = useState<ChartTabId>("histogram");
+  const [activeTab, setActiveTab] = useState<ChartTabId>("nine-box");
   const [selectedManager, setSelectedManager] =
     useState<ManagerHeatmapRow | null>(null);
 
@@ -55,6 +55,20 @@ export function AppraisalDistributionView() {
 
   const renderActiveChart = () => {
     switch (activeTab) {
+      case "nine-box":
+        return (
+          <ChartCard
+            chartId="nine-box"
+            title={labels.charts.nineBox.title}
+            subtitle={labels.charts.nineBox.subtitle}
+            helpText={labels.charts.nineBox.help}
+            ariaLabel={labels.charts.nineBox.ariaLabel}
+            loading={analytics.loading}
+            empty={isEmpty}
+          >
+            {analytics.nineBox && <GlobalNineBoxChart data={analytics.nineBox} />}
+          </ChartCard>
+        );
       case "histogram":
         return (
           <ChartCard
@@ -120,20 +134,6 @@ export function AppraisalDistributionView() {
             {analytics.departmentBoxplot && (
               <DepartmentBoxplotChart data={analytics.departmentBoxplot} />
             )}
-          </ChartCard>
-        );
-      case "nine-box":
-        return (
-          <ChartCard
-            chartId="nine-box"
-            title={labels.charts.nineBox.title}
-            subtitle={labels.charts.nineBox.subtitle}
-            helpText={labels.charts.nineBox.help}
-            ariaLabel={labels.charts.nineBox.ariaLabel}
-            loading={analytics.loading}
-            empty={isEmpty}
-          >
-            {analytics.nineBox && <GlobalNineBoxChart data={analytics.nineBox} />}
           </ChartCard>
         );
     }
