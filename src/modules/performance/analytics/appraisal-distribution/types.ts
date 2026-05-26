@@ -143,30 +143,32 @@ export interface DepartmentBoxplotData {
 
 export type NineBoxTier = 1 | 2 | 3;
 
-export interface NineBoxPlacement {
+export const NINE_BOX_GRID_LINES = [33.33, 66.67] as const;
+
+export interface NineBoxScatterPoint {
   appraisalId: string;
   employeeId: string;
   employeeName: string;
   performance: number;
   potential: number;
+  performancePercent: number;
+  potentialPercent: number;
   performanceTier: NineBoxTier;
   potentialTier: NineBoxTier;
+  quadrantLabel: string;
 }
 
-export interface NineBoxCell {
+export interface NineBoxQuadrant {
   performanceTier: NineBoxTier;
   potentialTier: NineBoxTier;
   label: string;
   count: number;
-  percentage: number;
-  employees: NineBoxPlacement[];
 }
 
 export interface NineBoxData {
-  cells: NineBoxCell[];
+  points: NineBoxScatterPoint[];
+  quadrants: NineBoxQuadrant[];
   total: number;
-  performanceThresholds: { p33: number; p66: number };
-  potentialThresholds: { p33: number; p66: number };
 }
 
 export interface AppraisalAnalyticsResult {

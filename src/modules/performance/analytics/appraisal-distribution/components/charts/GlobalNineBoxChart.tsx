@@ -1,174 +1,176 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { labels } from "../../labels";
-import type { NineBoxCell, NineBoxData, NineBoxPlacement } from "../../types";
+import type { NineBoxData, NineBoxScatterPoint } from "../../types";
+import { NINE_BOX_GRID_LINES } from "../../types";
 import { avatarColorFromId, getInitials } from "../../utils/initials";
-import { nineBoxCellColor } from "../../utils/nineBox";
+import { quadrantLabelPosition } from "../../utils/nineBox";
 import styles from "./GlobalNineBoxChart.module.css";
 
 interface GlobalNineBoxChartProps {
   data: NineBoxData;
 }
 
-interface SelectedCell {
-  cell: NineBoxCell;
-}
+const AXIS_TICKS = [0, 33, 67, 100];
 
-function EmployeeAvatar({
-  employee,
+function EmployeeDot({
+  point,
+  isSelected,
   onSelect,
 }: {
-  employee: NineBoxPlacement;
+  point: NineBoxScatterPoint;
+  isSelected: boolean;
   onSelect: () => void;
 }) {
-  const initials = getInitials(employee.employeeName);
-  const bg = avatarColorFromId(employee.employeeId);
+  const initials = getInitials(point.employeeName);
+  const bg = avatarColorFromId(point.employeeId);
 
   return (
-    <span
-      className={styles.avatar}
-      style={{ backgroundColor: bg }}
-      tabIndex={0}
-      role="img"
-      aria-label={employee.employeeName}
+    <button
+      type="button"
+      className={`${styles.dot} ${isSelected ? styles.dotSelected : ""}`}
+      style={{
+        left: `${point.performancePercent}%`,
+        top: `${100 - point.potentialPercent}%`,
+        backgroundColor: bg,
+      }}
+      aria-label={`${point.employeeName}, ${point.quadrantLabel}`}
       onClick={(e) => {
         e.stopPropagation();
         onSelect();
       }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          e.stopPropagation();
-          onSelect();
-        }
-      }}
     >
-      <span className={styles.avatarInitials} aria-hidden="true">
+      <span className={styles.dotInitials} aria-hidden="true">
         {initials}
       </span>
-      <span className={styles.avatarTooltip} role="tooltip">
-        {employee.employeeName}
+      <span className={styles.dotTooltip} role="tooltip">
+        {point.employeeName}
       </span>
-    </span>
+    </button>
   );
 }
 
 export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
   const L = labels.charts.nineBox;
-  const [selected, setSelected] = useState<SelectedCell | null>(null);
+  const [selected, setSelected] = useState<NineBoxScatterPoint | null>(null);
 
-  const rows = [3, 2, 1] as const;
+  const legendItems = useMemo(
+    () => data.quadrants.filter((q) => q.count > 0).slice(0, 6),
+    [data.quadrants],
+  );
 
   return (
     <div className={styles.wrap} role="img" aria-label={L.ariaLabel}>
       <p className={styles.summary}>
         {L.total}: <strong>{data.total}</strong>
-        <span className={styles.thresholds}>
-          {L.perfThresholds}: ≤{data.performanceThresholds.p33.toFixed(2)} / ≤
-          {data.performanceThresholds.p66.toFixed(2)} · {L.potThresholds}: ≤
-          {data.potentialThresholds.p33.toFixed(2)} / ≤
-          {data.potentialThresholds.p66.toFixed(2)}
-        </span>
+        <span className={styles.hint}>{L.scatterHint}</span>
       </p>
 
-      <div className={styles.gridLayout}>
-        <div className={styles.yAxis} aria-hidden="true">
-          <span className={styles.yHigh}>{L.potentialHigh}</span>
-          <span>{L.potentialMid}</span>
-          <span className={styles.yLow}>{L.potentialLow}</span>
-          <span className={styles.yTitle}>{L.axisPotential}</span>
+      {legendItems.length > 0 && (
+        <div className={styles.legend} aria-hidden="true">
+          {legendItems.map((q) => (
+            <span key={`${q.performanceTier}-${q.potentialTier}`}>
+              <span className={styles.legendSwatch} />
+              {q.label}
+              <span className={styles.legendCount}>({q.count})</span>
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className={styles.chartFrame}>
+        <div className={styles.yAxisLabel}>{L.axisPotential}</div>
+
+        <div className={styles.yTicks} aria-hidden="true">
+          {[...AXIS_TICKS].reverse().map((t) => (
+            <span key={`y-${t}`}>{t}</span>
+          ))}
         </div>
 
-        <div className={styles.gridWrap}>
+        <div className={styles.plotColumn}>
           <div
-            className={styles.grid}
-            role="grid"
+            className={styles.plot}
+            role="application"
             aria-label={L.gridLabel}
+            onClick={() => setSelected(null)}
           >
-            {rows.map((potTier) => (
-              <div
-                key={`row-${potTier}`}
-                className={styles.row}
-                role="row"
-              >
-                {([1, 2, 3] as const).map((perfTier) => {
-                  const cell = data.cells.find(
-                    (c) =>
-                      c.performanceTier === perfTier &&
-                      c.potentialTier === potTier,
-                  );
-                  if (!cell) return null;
+            <svg
+              className={styles.gridSvg}
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              {NINE_BOX_GRID_LINES.map((g) => (
+                <g key={g}>
+                  <line
+                    x1={g}
+                    y1={0}
+                    x2={g}
+                    y2={100}
+                    className={styles.gridLine}
+                  />
+                  <line
+                    x1={0}
+                    y1={100 - g}
+                    x2={100}
+                    y2={100 - g}
+                    className={styles.gridLine}
+                  />
+                </g>
+              ))}
+            </svg>
 
-                  const isSelected =
-                    selected?.cell.performanceTier === perfTier &&
-                    selected?.cell.potentialTier === potTier;
+            {data.quadrants.map((q) => {
+              const pos = quadrantLabelPosition(
+                q.performanceTier,
+                q.potentialTier,
+              );
+              return (
+                <span
+                  key={`${q.performanceTier}-${q.potentialTier}`}
+                  className={styles.quadrantLabel}
+                  style={{
+                    left: `${pos.left}%`,
+                    top: `${pos.top}%`,
+                  }}
+                >
+                  {q.label}
+                </span>
+              );
+            })}
 
-                  return (
-                    <div
-                      key={cellKey(perfTier, potTier)}
-                      role="gridcell"
-                      tabIndex={0}
-                      className={`${styles.cell} ${isSelected ? styles.cellSelected : ""}`}
-                      style={{
-                        backgroundColor: nineBoxCellColor(
-                          perfTier,
-                          potTier,
-                          cell.count,
-                        ),
-                      }}
-                      aria-label={`${cell.label}: ${cell.count} ${L.people}, ${cell.percentage.toFixed(0)}%`}
-                      onClick={() => setSelected({ cell })}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setSelected({ cell });
-                        }
-                      }}
-                    >
-                      <div className={styles.cellHeader}>
-                        <span className={styles.cellLabel}>{cell.label}</span>
-                        <span className={styles.cellMeta}>
-                          <span className={styles.cellCount}>{cell.count}</span>
-                          <span className={styles.cellPct}>
-                            {cell.percentage.toFixed(0)}%
-                          </span>
-                        </span>
-                      </div>
-
-                      <div className={styles.avatars}>
-                        {cell.employees.map((emp) => (
-                          <EmployeeAvatar
-                            key={emp.appraisalId}
-                            employee={emp}
-                            onSelect={() => setSelected({ cell })}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            {data.points.map((point) => (
+              <EmployeeDot
+                key={point.appraisalId}
+                point={point}
+                isSelected={selected?.appraisalId === point.appraisalId}
+                onSelect={() => setSelected(point)}
+              />
             ))}
           </div>
 
-          <div className={styles.xAxis} aria-hidden="true">
-            <span>{L.performanceLow}</span>
-            <span>{L.performanceMid}</span>
-            <span>{L.performanceHigh}</span>
+          <div className={styles.xTicks} aria-hidden="true">
+            {AXIS_TICKS.map((t) => (
+              <span key={`x-${t}`}>{t}</span>
+            ))}
           </div>
-          <p className={styles.xTitle}>{L.axisPerformance}</p>
+          <p className={styles.xAxisLabel}>{L.axisPerformance}</p>
         </div>
       </div>
 
       {selected && (
         <aside className={styles.detail} aria-live="polite">
           <header className={styles.detailHeader}>
-            <h3 className={styles.detailTitle}>
-              {selected.cell.label}
-              <span className={styles.detailMeta}>
-                {selected.cell.count} {L.people} (
-                {selected.cell.percentage.toFixed(1)}%)
-              </span>
-            </h3>
+            <span
+              className={styles.detailAvatar}
+              style={{ backgroundColor: avatarColorFromId(selected.employeeId) }}
+              aria-hidden="true"
+            >
+              {getInitials(selected.employeeName)}
+            </span>
+            <div>
+              <h3 className={styles.detailTitle}>{selected.employeeName}</h3>
+              <p className={styles.detailQuadrant}>{selected.quadrantLabel}</p>
+            </div>
             <button
               type="button"
               className={styles.detailClose}
@@ -177,38 +179,28 @@ export function GlobalNineBoxChart({ data }: GlobalNineBoxChartProps) {
               {L.closeDetail}
             </button>
           </header>
-          {selected.cell.employees.length === 0 ? (
-            <p className={styles.detailEmpty}>{L.noEmployees}</p>
-          ) : (
-            <ul className={styles.employeeList}>
-              {selected.cell.employees.map((emp) => (
-                <li key={emp.appraisalId}>
-                  <span
-                    className={styles.listAvatar}
-                    style={{
-                      backgroundColor: avatarColorFromId(emp.employeeId),
-                    }}
-                    aria-hidden="true"
-                  >
-                    {getInitials(emp.employeeName)}
-                  </span>
-                  <span className={styles.listBody}>
-                    <span className={styles.empName}>{emp.employeeName}</span>
-                    <span className={styles.empScores}>
-                      {L.perfShort} {emp.performance.toFixed(2)} ·{" "}
-                      {L.potShort} {emp.potential.toFixed(2)}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+          <dl className={styles.detailScores}>
+            <div>
+              <dt>{L.axisPerformance}</dt>
+              <dd>
+                {selected.performance.toFixed(2)}{" "}
+                <span className={styles.pct}>
+                  ({selected.performancePercent.toFixed(0)}%)
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>{L.axisPotential}</dt>
+              <dd>
+                {selected.potential.toFixed(2)}{" "}
+                <span className={styles.pct}>
+                  ({selected.potentialPercent.toFixed(0)}%)
+                </span>
+              </dd>
+            </div>
+          </dl>
         </aside>
       )}
     </div>
   );
-}
-
-function cellKey(perf: number, pot: number): string {
-  return `${perf}-${pot}`;
 }
