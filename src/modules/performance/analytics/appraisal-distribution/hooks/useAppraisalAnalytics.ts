@@ -49,10 +49,21 @@ export function useAppraisalAnalytics(
     return buildHistogram(filtered);
   }, [filtered]);
 
+  const managerBreakdown = useMemo(() => {
+    if (filters.managerIds.length === 0) return undefined;
+    return MOCK_MANAGERS.filter((manager) =>
+      filters.managerIds.includes(manager.id),
+    );
+  }, [filters.managerIds]);
+
   const distribution = useMemo(() => {
     if (filtered.length === 0) return null;
-    return buildDistribution(filtered, expectedDistribution);
-  }, [filtered, expectedDistribution]);
+    return buildDistribution(
+      filtered,
+      expectedDistribution,
+      managerBreakdown,
+    );
+  }, [filtered, expectedDistribution, managerBreakdown]);
 
   const managerHeatmap = useMemo(() => {
     if (filtered.length === 0) return null;

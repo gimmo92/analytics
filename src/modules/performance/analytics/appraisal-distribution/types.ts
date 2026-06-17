@@ -89,6 +89,14 @@ export interface DistributionPoint {
   realDensity: number;
   expectedDensity: number;
   gap: number;
+  [seriesKey: string]: number;
+}
+
+export interface ManagerDistributionSeries {
+  managerId: string;
+  managerName: string;
+  dataKey: string;
+  color: string;
 }
 
 export interface DistributionData {
@@ -96,6 +104,7 @@ export interface DistributionData {
   meanDeviation: number;
   realMean: number;
   expectedMean: number;
+  managerSeries?: ManagerDistributionSeries[];
 }
 
 export type ManagerCalibrationBadge = "generous" | "strict" | "aligned";

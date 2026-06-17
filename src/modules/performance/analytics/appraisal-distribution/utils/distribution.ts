@@ -1,4 +1,9 @@
-import type { Appraisal, DistributionData, ExpectedDistributionConfig } from "../types";
+import type {
+  Appraisal,
+  DistributionData,
+  ExpectedDistributionConfig,
+  ManagerDistributionSeries,
+} from "../types";
 import {
   RATING_BUCKETS,
   RATING_MAX,
@@ -14,6 +19,21 @@ const DEFAULT_EXPECTED: ExpectedDistributionConfig = {
 };
 
 const CURVE_STEP = 0.08;
+
+const MANAGER_CURVE_COLORS = [
+  "var(--color-primary)",
+  "#2563eb",
+  "#7c3aed",
+  "#db2777",
+  "#ea580c",
+  "#059669",
+  "#0891b2",
+  "#ca8a04",
+] as const;
+
+function managerDataKey(managerId: string): string {
+  return `mgr_${managerId.replace(/[^a-zA-Z0-9]/g, "_")}`;
+}
 
 function gaussianKernel(u: number): number {
   return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * u * u);
@@ -86,22 +106,65 @@ function weightedMean(
 export function buildDistribution(
   appraisals: Appraisal[],
   expectedConfig: ExpectedDistributionConfig = DEFAULT_EXPECTED,
+  managerBreakdown?: { id: string; name: string }[],
 ): DistributionData {
   const ratings = appraisals.map((a) => a.finalRating);
   const bandwidth = silvermanBandwidth(ratings);
   const config = { ...DEFAULT_EXPECTED, ...expectedConfig };
+
+  const managerRatings = new Map<string, number[]>();
+  const managerBandwidths = new Map<string, number>();
+  let managerSeries: ManagerDistributionSeries[] | undefined;
+
+  if (managerBreakdown && managerBreakdown.length > 0) {
+    for (const manager of managerBreakdown) {
+      managerRatings.set(manager.id, []);
+    }
+    for (const appraisal of appraisals) {
+      const bucket = managerRatings.get(appraisal.managerId);
+      if (bucket) bucket.push(appraisal.finalRating);
+    }
+    managerSeries = managerBreakdown.map((manager, index) => {
+      const ratingsForManager = managerRatings.get(manager.id) ?? [];
+      managerBandwidths.set(
+        manager.id,
+        silvermanBandwidth(ratingsForManager),
+      );
+      return {
+        managerId: manager.id,
+        managerName: manager.name,
+        dataKey: managerDataKey(manager.id),
+        color: MANAGER_CURVE_COLORS[index % MANAGER_CURVE_COLORS.length],
+      };
+    });
+  }
 
   const points: DistributionPoint[] = [];
   for (let x = RATING_MIN; x <= RATING_MAX + CURVE_STEP / 2; x += CURVE_STEP) {
     const rounded = Math.round(x * 100) / 100;
     const realDensity = kde(ratings, rounded, bandwidth);
     const expectedDensity = expectedDensityAt(rounded, config);
-    points.push({
+    const point: DistributionPoint = {
       x: rounded,
       realDensity,
       expectedDensity,
       gap: realDensity - expectedDensity,
-    });
+    };
+
+    if (managerSeries) {
+      for (const series of managerSeries) {
+        const managerRatingList = managerRatings.get(series.managerId) ?? [];
+        const managerBandwidth =
+          managerBandwidths.get(series.managerId) ?? bandwidth;
+        point[series.dataKey] = kde(
+          managerRatingList,
+          rounded,
+          managerBandwidth,
+        );
+      }
+    }
+
+    points.push(point);
   }
 
   const realMean =
@@ -116,5 +179,6 @@ export function buildDistribution(
     meanDeviation,
     realMean,
     expectedMean,
+    managerSeries,
   };
 }

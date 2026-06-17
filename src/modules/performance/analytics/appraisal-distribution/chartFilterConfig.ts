@@ -6,7 +6,7 @@ export type ChartFilterField = "cycle" | "department" | "manager";
 export const CHART_FILTER_FIELDS: Record<ChartTabId, ChartFilterField[]> = {
   "nine-box": ["cycle", "department", "manager"],
   histogram: ["cycle", "department"],
-  "bell-curve": ["cycle"],
+  "bell-curve": ["cycle", "manager"],
   "manager-heatmap": ["cycle", "department"],
   "team-histogram": ["cycle", "department"],
 };

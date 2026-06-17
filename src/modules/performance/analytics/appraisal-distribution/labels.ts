@@ -43,7 +43,7 @@ export const labels = {
       title: "Curva attesa vs reale",
       subtitle: "Confronto con la distribuzione target configurata",
       help:
-        "La linea piena mostra la densità stimata dai dati (KDE). La linea tratteggiata è la distribuzione attesa (default: normale μ=3.0, σ=0.8). Il badge indica lo scostamento medio tra le due curve.",
+        "La linea piena mostra la densità stimata dai dati (KDE). La linea tratteggiata è la distribuzione attesa (default: normale μ=3.0, σ=0.8). Seleziona uno o più manager per confrontare le curve per manager. Il badge indica lo scostamento medio tra le due curve.",
       ariaLabel: "Grafico curva attesa vs distribuzione reale",
       xAxis: "Rating",
       yAxis: "Densità",

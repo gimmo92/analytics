@@ -7,20 +7,20 @@ import type {
 
 export const MOCK_CYCLES: AppraisalCycle[] = [
   {
-    id: "cycle-2025-h1",
-    name: "H1 2025",
+    id: "cycle-2025",
+    name: "2025",
     status: "closed",
     closedAt: "2025-07-15",
   },
   {
-    id: "cycle-2024-h2",
-    name: "H2 2024",
+    id: "cycle-2024",
+    name: "2024",
     status: "closed",
     closedAt: "2025-01-20",
   },
   {
-    id: "cycle-2025-h2",
-    name: "H2 2025",
+    id: "cycle-2026",
+    name: "2026",
     status: "open",
   },
 ];
